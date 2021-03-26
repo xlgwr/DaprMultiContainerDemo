@@ -1,21 +1,45 @@
-version: '3.4'
+version: "3.4"
 
 services:
+  redis:
+    image: redis:latest
+    ports:
+      - "5379:6379"
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "5411:9411"
+
   daprfrontend:
     image: ${DOCKER_REGISTRY-}daprfrontend
     build:
       context: .
       dockerfile: DaprFrontEnd/Dockerfile
     ports:
-      - "53000:50001" 
+      - "51001:50001"
       - "9081:80" 
 
   daprfrontend-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "daprfrontend", "-app-port", "80" ]
+    command:
+      [
+        "./daprd",
+        "-app-id",
+        "daprfrontend",
+        "-app-port",
+        "80",
+        "-components-path",
+        "/components",
+        "-config",
+        "/configuration/config.yaml",
+      ]
     depends_on:
       - daprfrontend
-    network_mode: "service:daprfrontend" 
+    network_mode: "service:daprfrontend"
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   daprbackend:
     image: ${DOCKER_REGISTRY-}daprbackend
@@ -23,19 +47,40 @@ services:
       context: .
       dockerfile: DaprBackEnd/Dockerfile
     ports:
-      - "52000:50001"
+      - "55000:50001"
+      - "9080:8080"
 
   daprbackend-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "daprbackend", "-app-port", "80" ]
+    command:
+      [
+        "./daprd",
+        "-app-id",
+        "daprbackend",
+        "-app-port",
+        "80",
+        "-components-path",
+        "/components",
+        "-config",
+        "/configuration/config.yaml",
+      ]
     depends_on:
       - daprfrontend
     network_mode: "service:daprbackend"
-    
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+
   daprbackend-dashboard:
     image: "daprio/dashboard:latest"
-    command: [ "./daprd", "dashboard"]
-    ports:
-      - "9080:8080"
+    command:
+      [
+        "./daprd",
+        "dashboard"
+      ]
+    depends_on:
+      - daprfrontend
     network_mode: "service:daprbackend"
-
+    volumes:
+      - "./dapr/components/:/root/.dapr/components"
+      - "./dapr/configuration/:/root/.dapr/configuration"
