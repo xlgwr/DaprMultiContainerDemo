@@ -37,4 +37,5 @@ services:
     command: [ "./daprd", "dashboard"]
     ports:
       - "9080:8080"
+    network_mode: "service:daprbackend"
 
