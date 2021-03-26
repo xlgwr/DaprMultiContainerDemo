@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  daprfrontend:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  daprbackend:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
