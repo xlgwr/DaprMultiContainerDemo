@@ -8,7 +8,7 @@ services:
       dockerfile: DaprFrontEnd/Dockerfile
     ports:
       - "53000:50001" 
-      - "8088:80" 
+      - "9081:80" 
 
   daprfrontend-dapr:
     image: "daprio/daprd:latest"
@@ -31,4 +31,10 @@ services:
     depends_on:
       - daprfrontend
     network_mode: "service:daprbackend"
+    
+  daprbackend-dashboard:
+    image: "daprio/dashboard:latest"
+    command: [ "./daprd", "dashboard"]
+    ports:
+      - "9080:8080"
 
