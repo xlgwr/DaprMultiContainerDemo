@@ -11,4 +11,9 @@
     {
         <p>the forecast for @item.Date is @item.Summary!</p>
     }
+    @foreach (var item in (IEnumerable<Order>)ViewData["orders"])
+    {
+        <p>Orders: @item.orderId , @item.productId @item.amount</p>
+    }
+
 </div>

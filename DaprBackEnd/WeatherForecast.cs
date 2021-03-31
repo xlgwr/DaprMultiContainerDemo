@@ -12,4 +12,10 @@ namespace DaprBackEnd
 
         public string Summary { get; set; }
     }
+    public class Order
+    {
+        public string orderId { get; set; }
+        public string productId { get; set; }
+        public string amount { get; set; }
+    }
 }

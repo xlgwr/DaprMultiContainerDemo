@@ -28,6 +28,12 @@ namespace DaprFrontEnd.Pages
                 "daprbackend",
                 "weatherforecast");
             ViewData["WeatherForecastData"] = forecasts;
+
+            var orders =await _daprClient.InvokeMethodAsync<IEnumerable<Order>>(
+                HttpMethod.Get,
+                "daprbackend",
+                "orders");
+            ViewData["orders"] = orders;
         }
     }
 }

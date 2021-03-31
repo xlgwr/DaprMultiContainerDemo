@@ -1,20 +1,24 @@
 version: '3.4'
 
 services:
+
+  redis:
+    image: redis:alpine
+
+  zipkin:
+    image: openzipkin/zipkin-slim
+
   daprfrontend:
     image: ${DOCKER_REGISTRY-}daprfrontend
     build:
       context: .
-      dockerfile: DaprFrontEnd/Dockerfile
-    ports:
-      - "53000:50001" 
-      - "9081:80" 
+      dockerfile: DaprFrontEnd/Dockerfile   
+        
 
   daprfrontend-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "daprfrontend", "-app-port", "80" ]
     depends_on:
-      - daprfrontend
+      - daprfrontend     
     network_mode: "service:daprfrontend" 
 
   daprbackend:
@@ -22,20 +26,16 @@ services:
     build:
       context: .
       dockerfile: DaprBackEnd/Dockerfile
-    ports:
-      - "52000:50001"
 
   daprbackend-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "daprbackend", "-app-port", "80" ]
     depends_on:
-      - daprfrontend
+      - daprbackend     
     network_mode: "service:daprbackend"
     
   daprbackend-dashboard:
-    image: "daprio/dashboard:latest"
-    command: [ "./daprd", "dashboard"]
-    ports:
-      - "9080:8080"
-    network_mode: "service:daprbackend"
+    image: "daprio/dashboard:latest"   
+  
+  dapr-placement:
+    image: "daprio/dapr:latest"     
 
