@@ -9,6 +9,19 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DaprBackEnd", "DaprBackEnd\DaprBackEnd.csproj", "{EB5F4A2B-A1AB-4630-81EA-471944FFBAF6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{7527F8E3-A88E-4615-9E5C-E9D6110E1781}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{97C3FE61-2C7F-4325-A8C1-95C82F02C611}"
+	ProjectSection(SolutionItems) = preProject
+		dapr\components\pubsub.yaml = dapr\components\pubsub.yaml
+		dapr\components\statestore.yaml = dapr\components\statestore.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{44E9DCDC-279C-4D5F-B130-DAB5D60F4049}"
+	ProjectSection(SolutionItems) = preProject
+		dapr\configuration\config.yaml = dapr\configuration\config.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +43,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{97C3FE61-2C7F-4325-A8C1-95C82F02C611} = {7527F8E3-A88E-4615-9E5C-E9D6110E1781}
+		{44E9DCDC-279C-4D5F-B130-DAB5D60F4049} = {7527F8E3-A88E-4615-9E5C-E9D6110E1781}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D7611EBC-AE43-48E4-A408-52C293BB37EF}

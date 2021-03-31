@@ -2,7 +2,10 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: statestore
+<<<<<<< HEAD
   namespace: default
+=======
+>>>>>>> 2826c1fcc726930dbaa4c8ba32438219f82c71b8
 spec:
   type: state.redis
   metadata:
