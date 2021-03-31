@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapr;
+using Dapr.Client;
 
 namespace DaprBackEnd.Controllers
 {
@@ -12,6 +13,7 @@ namespace DaprBackEnd.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly DaprClient _daprClient;
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -22,9 +24,10 @@ namespace DaprBackEnd.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, DaprClient daprClient)
         {
             _logger = logger;
+            _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
         }
 
         [HttpGet]
@@ -44,7 +47,19 @@ namespace DaprBackEnd.Controllers
         {
             return Orders;
         }
-
+        /// <summary>
+        ///  
+        ///  post http://localhost:3502/v1.0/publish/pubsub/newOrder
+        ///  data { "orderId": "123678", "productId": "5678", "amount": "2" }
+        /// </summary>
+        [HttpPost("/publishorder")]
+        public async Task<ActionResult> PublishOrderAsync(Order order)
+        {
+            await _daprClient.PublishEventAsync<Order>("pubsub", "newOrder", order);
+            return Ok();
+        }
+        /// <param name="order"></param>
+        /// <returns></returns>
         [Topic("pubsub", "newOrder")]
         [HttpPost("/orders")]
         public async Task<ActionResult> CreateOrder(Order order)
